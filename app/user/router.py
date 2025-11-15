@@ -14,7 +14,7 @@ async def login(response: Response, user_in: UserAuthDTO):
     if not auth_user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверный email или пароль")
     access_token = create_access_token({"sub": str(auth_user.id)})
-    response.set_cookie(key="user_access_token", value=access_token, httponly=True)
+    response.set_cookie(key="users_access_token", value=access_token, httponly=True)
     return {"token": access_token}
 
 @router.post("/register/")
@@ -30,7 +30,7 @@ async def register(user_in: UserRegDTO):
 
 @router.post("/logout/")
 async def logout(response: Response):
-    response.delete_cookie(key="user_access_token")
+    response.delete_cookie(key="users_access_token")
     return {"message": "Пользователь вышел"}
 
 @router.get("/profile/")

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Страница блога</title>
+</head>
+<body>
+<!-- Содержимое статьи -->
+<p>{{ blog.content }}</p>
+<!-- Перечисляем тэги статьи -->
+<div>
+    {% if blog.tags %}
+    <ul>
+        {% for tag in blog.tags %}
+        <li><a href="......................">{{ tag.name }}</a>></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>В данной статье нет тэгов</p>
+    {% endif %}
+<!-- Если автор статьи, то может менять статус публикации -->
+</div>
+{% if current_user_id == blog.author %}
+<div>
+    {% if blog.status == 'published' %}
+        <button>Добавить в черновики</button>
+        {% else %}
+        <button>Опубликовать</button>>
+    {% endif %}
+{% endif %}
+<button>Удалить блог</button>
+</div>
+
+<a href="/blogs/all_blogs">Смотреть все блоги</a>
+
+<script src="/static/js/post.js"></script>
+</body>
+</html>

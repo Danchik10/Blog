@@ -10,12 +10,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 router = APIRouter(prefix='/api', tags=['API'])
 
 @router.post("/add_post/")
-async def add_blog(blog_in: BlogDTO, user_data: Annotated[UserDataDTO, Depends(get_current_user)], session: AsyncSession=TransactionSessionDep):
+async def add_blog(blog_in: BlogDTO, current_user: Annotated[UserDataDTO, Depends(get_current_user)], session: AsyncSession=TransactionSessionDep):
     """ 1. Добавили блог.
         2. Добавили недостающие теги и получили список ID тегов.
         3. Связали теги и блог в таблице временных связей."""
     blog_data = blog_in.model_dump(exclude={'tags'}) # в модели Blog нет поля tag, а в pydantic модели есть. Поэтому исключаем его
-    blog_data["author"] = user_data.id  # обращаемся по ключу author, тем самым создавая новое поле в pydantic, оно устанавливаетя значением текущего польователя
+    blog_data["author"] = current_user.id  # обращаемся по ключу author, тем самым создавая новое поле в pydantic, оно устанавливаетя значением текущего польователя
     blog = await BlogDAO.create_add(**blog_data)
 
     tag_ids = await TagDAO.add_tag(session=session, tag_names=blog_in.tags)
