@@ -10,7 +10,7 @@ from app.api.dao import BlogDAO
 from app.daos.session_maker import SessionDep
 
 def get_token(request: Request) -> str:
-    token = request.cookies.get("user_access_token")
+    token = request.cookies.get("users_access_token")
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="токен не найден")
     return token
@@ -41,7 +41,7 @@ async def get_current_admin_user(user: Annotated[User, Depends(get_current_user)
 
 
 def get_token_optional(request: Request) -> str | None:
-    token = request.cookies.get("user_access_token")
+    token = request.cookies.get("users_access_token")
     return token
 
 async def get_optional_current_user(token: Annotated[str, Depends(get_token_optional)]) -> User | None:

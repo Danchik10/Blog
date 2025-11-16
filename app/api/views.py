@@ -3,7 +3,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.user.dependencies import get_blog_info, get_optional_current_user
 from app.api.schemas import BlogFullDataDTO
-from app.user.schemas import UserDataDTO
+from app.user.models import User
 from app.api.dao import BlogDAO
 from app.daos.session_maker import SessionDep
 from typing import Annotated
@@ -14,7 +14,7 @@ router = APIRouter(tags=['Фронтенд'])
 
 @router.get("/blogs/{blog_id}")
 async def blog_page(blog_id: int, request: Request, blog_data: Annotated[BlogFullDataDTO, Depends(get_blog_info)],
-                    current_user: Annotated[UserDataDTO, Depends(get_optional_current_user)]):
+                    current_user: Annotated[User | None, Depends(get_optional_current_user)]):
     blog = blog_data.model_dump()
     current_user_id = current_user.id if current_user else None
     return templates.TemplateResponse(name="post.html", context={"request": request, "blog": blog,

@@ -2,8 +2,8 @@
 function getCookie(name) {
     return document.cookie
         .split(';')
-        .map(cookie =&gt; cookie.trim())
-        .find(cookie =&gt; cookie.startsWith(`${name}=`))
+        .map(cookie => cookie.trim())
+        .find(cookie => cookie.startsWith(`${name}=`))
         ?.split('=')[1] || null;
 }
 
@@ -46,7 +46,7 @@ async function sendRequest(url, method, body = null, jwtToken = null) {
 }
 
 // Инициализация данных
-document.addEventListener('DOMContentLoaded', () =&gt; {
+document.addEventListener('DOMContentLoaded', () => {
     const articleContainer = document.querySelector('.article-container');
     if (!articleContainer) {
         console.error('Элемент .article-container не найден. Убедитесь, что он присутствует в DOM.');
@@ -57,14 +57,14 @@ document.addEventListener('DOMContentLoaded', () =&gt; {
         id: articleContainer.dataset.blogId,
         status: articleContainer.dataset.blogStatus,
         author: articleContainer.dataset.blogAuthor,
-        jwtToken: getCookie('users_access_token'),
+        jwtToken: getCookie('user_access_token'),
     };
 
     console.log('BLOG_DATA:', BLOG_DATA);
 
     const deleteButton = document.querySelector('[data-action="delete"]');
     if (deleteButton) {
-        deleteButton.addEventListener('click', () =&gt; {
+        deleteButton.addEventListener('click', () => {
             if (confirm('Вы уверены, что хотите удалить этот блог?')) {
                 deleteBlog(BLOG_DATA);
             }
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () =&gt; {
 
     const statusButton = document.querySelector('[data-action="change-status"]');
     if (statusButton) {
-        statusButton.addEventListener('click', () =&gt; {
+        statusButton.addEventListener('click', () => {
             const newStatus = statusButton.dataset.newStatus;
             changeBlogStatus(BLOG_DATA, newStatus);
         });
@@ -88,6 +88,7 @@ async function deleteBlog({id, jwtToken}) {
         window.location.href = '/blogs/';
     } catch (error) {
         console.error('Не удалось удалить блог:', error);
+        alert('Ошибка при удалении блога: ' + error.message);
     }
 }
 
