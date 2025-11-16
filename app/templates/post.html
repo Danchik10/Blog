@@ -6,16 +6,26 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Страница блога</title>
+    <link rel="stylesheet" href="/static/style/post.css">
 </head>
 <body>
+<article class="article-container"
+         data-blog-id="{{ blog.id }}"
+         data-blog-status="{{ blog.status }}"
+         data-blog-author="{{ blog.author }}">
+    <h1 class="article-title">{{ blog.title }}</h1>
+    <div class="article-meta">
+        <a href="/blogs?author_id={{ blog.author }}">{{ blog.author }}</a> •
+        {{ blog.created_at.strftime('%d %B %Y') }}
+    </div>
 <!-- Содержимое статьи -->
-<p>{{ blog.content }}</p>
+    <div class="article-content"><p>{{ blog.content }}</p></div>
 <!-- Перечисляем тэги статьи -->
-<div>
+<div class="tags-container">
     {% if blog.tags %}
-    <ul>
+    <ul class="tags">
         {% for tag in blog.tags %}
-        <li><a href="......................">{{ tag.name }}</a>></li>
+        <li><a href="/blogs?tag={{ tag.name }}" class="tag">{{ tag.name }}</a>></li>
         {% endfor %}
     </ul>
     {% else %}
@@ -24,17 +34,19 @@
 <!-- Если автор статьи, то может менять статус публикации -->
 </div>
 {% if current_user_id == blog.author %}
-<div>
+<div class="article-actions">
     {% if blog.status == 'published' %}
-        <button>Добавить в черновики</button>
+        <button class="button status-button" data-action="change-status" data-new-status="draft">Добавить в черновики</button>
         {% else %}
-        <button>Опубликовать</button>>
+        <button class="button status-button" data-action="change-status" data-new-status="published">Опубликовать</button>>
     {% endif %}
-{% endif %}
-<button>Удалить блог</button>
-</div>
 
-<a href="/blogs/all_blogs">Смотреть все блоги</a>
+<button class="button delete-button" data-action="delete">Удалить блог</button>
+</div>
+{% endif %}
+</article>
+
+<div class="view-blogs"><a href="/blogs/">Смотреть все блоги</a></div>
 
 <script src="/static/js/post.js"></script>
 </body>

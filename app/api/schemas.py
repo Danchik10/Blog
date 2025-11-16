@@ -23,11 +23,12 @@ class UserDTO(BaseModelConfig):
 
 class BlogFullDataDTO(BaseModelConfig):
     id: int = Field(..., description="ID блога")
+    author: int
     created_at: datetime = Field(..., description="дата создания")
     updated_at: Optional[datetime] = Field(None, description="дата обновления")
     title: str = Field(..., description="название блога")
     content: str = Field(..., description="информация блога")
     short_description: str = Field(..., description="краткое описание блога")
     status: str = Field(..., description="статус блога")
-    user: UserDTO = Field()
+    user: UserDTO = Field(exclude=True)
     tags: List["TagsDTO"]
